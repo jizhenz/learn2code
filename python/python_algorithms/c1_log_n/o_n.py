@@ -1,6 +1,9 @@
-# Binary Search template file
 
 from c0_utils.decorators import Timing
+import logging
+from c0_utils.logger import StreamLogger
+
+logger = StreamLogger(__name__, logging.DEBUG)
 
 @Timing
 def contains_native(collection, target):
@@ -8,38 +11,31 @@ def contains_native(collection, target):
     return target in collection
 
 @Timing
-def insertInPlace(ordered, target):
-    """Insert target into its proper location in the ordered collection"""
-    for i in range(len(ordered)):
-        if ordered[i] > target:
-            ordered.insert(i, target)
+def insert_into_sorted(sorted, target):
+    """Insert target into its proper location in the ordered collection: ordered from small to big."""
+    for i in range(len(sorted)):
+        if sorted[i] > target:
+            sorted.insert(i, target)
             return
+    sorted.append(target)
 
-    ordered.append(target)
-
-
-# def performance():
-#     """Demonstrate execution performance of contains"""
-#     n = 1024
-#     while n < 50000000:
-#         sorted = range(n)
-#         now = time()
-#
-#         # Code whose performance is to be evaluated
-#         insertInPlace(sorted, n/2)
-#
-#         done = time()
-#
-#         print n, (done-now)*1000
-#         n *= 2
-
-def test_01():
+def test_contains_native():
     n = 1024
     while n < 50000000:
         collection = range(n)
-        contains_native(collection, n/2)
+        result, m_sec = contains_native(collection, n/2)
         n *= 2
+        logger.info('Search %s in %s elements: used %s ms.' % (n/2, n, m_sec))
+
+def test_insert_into_sorted():
+    n = 1024
+    while n < 50000000:
+        sorted = range(n)
+        result, m_sec = insert_into_sorted(sorted, n/2)
+        n *= 2
+        logger.info('Insert %s into %s sorted elements: used %s ms.' % (n/2, n, m_sec))
 
 if __name__ == "__main__":
-    test_01()
+    test_contains_native()
+    test_insert_into_sorted()
 
