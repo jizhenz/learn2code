@@ -1,3 +1,4 @@
 sample.jupyter.notes/
 .ipynb_checkpoints/
 *.pyc
+build
